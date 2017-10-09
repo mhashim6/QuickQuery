@@ -13,8 +13,8 @@ public class QQActivity extends AppCompatActivity {
 	private static final String DUCK_DUCK_GO = "https://duckduckgo.com/?q=";
 	private static final String YOUTUBE = "https://www.youtube.com/results?search_query=";
 
-	public static final String MULTIPLE_SPACES = " +";
-	public static final String PLUS_SIGN = "+";
+	private static final String MULTIPLE_SPACES = " +";
+	private static final String PLUS_SIGN = "+";
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class QQActivity extends AppCompatActivity {
 		showDialog(query);
 	}
 
-	public void showDialog(final String query) {
+	private void showDialog(final String query) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		builder.setTitle(R.string.app_name)

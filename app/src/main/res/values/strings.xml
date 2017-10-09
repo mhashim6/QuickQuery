@@ -1,7 +1,4 @@
 <resources>
 	<string name="app_name">Quick Query</string>
-	<string name="google">Google</string>
-	<string name="youtube">Youtube</string>
-
 	<string name="cancel">Cancel</string>
 </resources>
