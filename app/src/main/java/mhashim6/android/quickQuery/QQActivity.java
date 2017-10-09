@@ -1,0 +1,69 @@
+package mhashim6.android.quickQuery;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+
+public class QQActivity extends AppCompatActivity {
+
+	private static final String GOOGLE = "https://www.google.com/search?q=";
+	private static final String YOUTUBE = "https://www.youtube.com/results?search_query=";
+
+	public static final String MULTIPLE_SPACES = " +";
+	public static final String PLUS_SIGN = "+";
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		String query = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString();
+		showDialog(query);
+	}
+
+	public void showDialog(final String query) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setTitle(R.string.app_name)
+				.setIcon(R.mipmap.ic_launcher_round)
+				.setItems(R.array.engines, (dialog, which) -> {
+					switch (which) {
+						case 0:
+							googleSearch(query);
+							break;
+
+						case 1:
+							youtubeSearch(query);
+							break;
+					}
+				})
+				.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
+				.setOnCancelListener(dialogInterface -> finish())
+				.show();
+	}
+
+	private void googleSearch(String query) {
+		Uri uri = Uri.parse(GOOGLE + query.trim().replaceAll(MULTIPLE_SPACES, PLUS_SIGN));
+		Intent i = new Intent(Intent.ACTION_VIEW, uri);
+
+		startActivity(i);
+		finish();
+	}
+
+	private void youtubeSearch(String query) {
+
+		try {
+			Intent intent = new Intent(Intent.ACTION_SEARCH);
+			intent.setPackage("com.google.android.youtube");
+			intent.putExtra("query", query);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+
+		} catch (Exception e) { //youtube is not installed.
+			Uri uri = Uri.parse(YOUTUBE + query.trim().replaceAll(MULTIPLE_SPACES, PLUS_SIGN));
+			Intent i = new Intent(Intent.ACTION_VIEW, uri);
+			startActivity(i);
+		}
+	}
+}
