@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 public class QQActivity extends AppCompatActivity {
 
 	private static final String GOOGLE = "https://www.google.com/search?q=";
+	private static final String DUCK_DUCK_GO = "https://duckduckgo.com/?q=";
 	private static final String YOUTUBE = "https://www.youtube.com/results?search_query=";
 
 	public static final String MULTIPLE_SPACES = " +";
@@ -30,11 +31,15 @@ public class QQActivity extends AppCompatActivity {
 				.setItems(R.array.engines, (dialog, which) -> {
 					switch (which) {
 						case 0:
-							googleSearch(query);
+							google(query);
 							break;
 
 						case 1:
-							youtubeSearch(query);
+							duck(query);
+							break;
+
+						case 2:
+							youtube(query);
 							break;
 					}
 				})
@@ -43,27 +48,32 @@ public class QQActivity extends AppCompatActivity {
 				.show();
 	}
 
-	private void googleSearch(String query) {
-		Uri uri = Uri.parse(GOOGLE + query.trim().replaceAll(MULTIPLE_SPACES, PLUS_SIGN));
-		Intent i = new Intent(Intent.ACTION_VIEW, uri);
-
-		startActivity(i);
-		finish();
+	private void google(String query) {
+		launchWebSearch(GOOGLE, query);
 	}
 
-	private void youtubeSearch(String query) {
+	private void duck(String query) {
+		launchWebSearch(DUCK_DUCK_GO, query);
+	}
+
+	private void youtube(String query) {
 
 		try {
 			Intent intent = new Intent(Intent.ACTION_SEARCH);
 			intent.setPackage("com.google.android.youtube");
 			intent.putExtra("query", query);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
 
 		} catch (Exception e) { //youtube is not installed.
-			Uri uri = Uri.parse(YOUTUBE + query.trim().replaceAll(MULTIPLE_SPACES, PLUS_SIGN));
-			Intent i = new Intent(Intent.ACTION_VIEW, uri);
-			startActivity(i);
+			launchWebSearch(YOUTUBE, query);
 		}
+	}
+
+	private void launchWebSearch(String engine, String query) {
+		Uri uri = Uri.parse(engine + query.trim().replaceAll(MULTIPLE_SPACES, PLUS_SIGN));
+		Intent i = new Intent(Intent.ACTION_VIEW, uri);
+
+		startActivity(i);
 	}
 }
