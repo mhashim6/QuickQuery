@@ -12,9 +12,11 @@ public class QQActivity extends AppCompatActivity {
 	private static final String GOOGLE = "https://www.google.com/search?q=";
 	private static final String DUCK_DUCK_GO = "https://duckduckgo.com/?q=";
 	private static final String YOUTUBE = "https://www.youtube.com/results?search_query=";
+	private static final String GOOGLE_PLAY = "market://search?q=";
 
 	private static final String MULTIPLE_SPACES = " +";
 	private static final String PLUS_SIGN = "+";
+	public static final String YOUTUBE_PACKAGE = "com.google.android.youtube";
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,15 +43,28 @@ public class QQActivity extends AppCompatActivity {
 						case 2:
 							youtube(query);
 							break;
+
+						case 3:
+							play(query);
+							break;
 					}
 				})
-				.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
+				//.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
 				.setOnCancelListener(dialogInterface -> finish())
 				.show();
 	}
 
 	private void google(String query) {
+	/*	Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+		intent.putExtra(SearchManager.QUERY, query);
+
+		if (intent.resolveActivity(getPackageManager()) != null) {
+			startActivity(intent);
+		} else {
+			launchWebSearch(GOOGLE, query);
+		}*/
 		launchWebSearch(GOOGLE, query);
+
 	}
 
 	private void duck(String query) {
@@ -58,16 +73,20 @@ public class QQActivity extends AppCompatActivity {
 
 	private void youtube(String query) {
 
-		try {
-			Intent intent = new Intent(Intent.ACTION_SEARCH);
-			intent.setPackage("com.google.android.youtube");
-			intent.putExtra("query", query);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-			startActivity(intent);
+		Intent intent = new Intent(Intent.ACTION_SEARCH);
+		intent.setPackage(YOUTUBE_PACKAGE);
+		intent.putExtra("query", query);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-		} catch (Exception e) { //youtube is not installed.
+		if (intent.resolveActivity(getPackageManager()) != null) {
+			startActivity(intent);
+		} else { //youtube is not installed.
 			launchWebSearch(YOUTUBE, query);
 		}
+	}
+
+	private void play(String query) {
+		launchWebSearch(GOOGLE_PLAY, query);
 	}
 
 	private void launchWebSearch(String engine, String query) {
