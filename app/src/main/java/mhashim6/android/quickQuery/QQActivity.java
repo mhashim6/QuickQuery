@@ -2,6 +2,7 @@ package mhashim6.android.quickQuery;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +22,14 @@ public class QQActivity extends AppCompatActivity {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String query = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString();
+
+		String query;
+		Intent starter = getIntent();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Intent.ACTION_PROCESS_TEXT.equals(starter.getAction()))
+			query = starter.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString();
+		else
+			query = starter.getCharSequenceExtra(Intent.EXTRA_TEXT).toString();
+
 		showDialog(query);
 	}
 
@@ -45,7 +53,7 @@ public class QQActivity extends AppCompatActivity {
 							break;
 
 						case 3:
-							play(query);
+							googlePlay(query);
 							break;
 					}
 				})
@@ -64,7 +72,6 @@ public class QQActivity extends AppCompatActivity {
 			launchWebSearch(GOOGLE, query);
 		}*/
 		launchWebSearch(GOOGLE, query);
-
 	}
 
 	private void duck(String query) {
@@ -85,7 +92,7 @@ public class QQActivity extends AppCompatActivity {
 		}
 	}
 
-	private void play(String query) {
+	private void googlePlay(String query) {
 		launchWebSearch(GOOGLE_PLAY, query);
 	}
 

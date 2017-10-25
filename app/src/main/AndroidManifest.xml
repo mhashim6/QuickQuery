@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 		  package="mhashim6.android.quickQuery">
 
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+	<uses-permission android:name="android.permission.GET_CLIPS"/>
+	<uses-permission android:name="android.permission.READ_CLIPS"/>
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
 	<application
 		android:allowBackup="false"
 		android:icon="@mipmap/ic_launcher_round"
@@ -11,7 +16,17 @@
 		android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent">
 
 		<activity
+			android:name=".MainActivity"
+			>
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+
+		<activity
 			android:name=".QQActivity"
+			android:excludeFromRecents="true"
 			android:noHistory="true">
 			<intent-filter>
 				<action android:name="android.intent.action.PROCESS_TEXT"/>
@@ -19,8 +34,26 @@
 				<data android:mimeType="text/plain"/>
 			</intent-filter>
 
+			<intent-filter>
+				<action android:name="QUICK_QUERY_ACTION"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:mimeType="text/plain"/>
+			</intent-filter>
+
+			<intent-filter>
+				<action android:name="android.intent.action.SEND"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:mimeType="text/plain"/>
+			</intent-filter>
 		</activity>
 
+		<receiver android:name=".BootBroadcastReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED"/>
+			</intent-filter>
+		</receiver>
+
+		<service android:name=".ClipboardMonitor"/>
 	</application>
 
 </manifest>

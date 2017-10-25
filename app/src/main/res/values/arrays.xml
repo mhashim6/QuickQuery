@@ -4,7 +4,7 @@
 	<string-array name="engines">
 		<item>Google</item>
 		<item>DuckDuckGo</item>
-		<item>Youtube</item>
+		<item>YouTube</item>
 		<item>Google Play</item>
 	</string-array>
 </resources>
