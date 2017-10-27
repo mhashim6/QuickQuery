@@ -65,6 +65,7 @@ public class ClipboardMonitor extends Service {
 			params.y = 100;
 
 			windowManager.addView(bubble, params);
+			bubble.postDelayed(() -> windowManager.removeView(bubble), 6000);
 		}
 	}
 
