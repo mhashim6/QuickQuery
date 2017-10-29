@@ -3,9 +3,12 @@ package mhashim6.android.quickQuery;
 import android.app.Service;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -22,63 +25,87 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class ClipboardMonitor extends Service {
 
 	private static final String QUICK_QUERY_ACTION = "QUICK_QUERY_ACTION";
-	private final static String AD_MPB_APP_ID = "ca-app-pub-1801049179059842~3245591274";
+	private static final String ADMOB_APP_ID = "ca-app-pub-1801049179059842~3245591274";
+	public static final String FLAVOR_FULL = "full";
 
-	private boolean showing;
+	private ImageView bubble;
+	private static final WindowManager.LayoutParams LAYOUT_PARAMS = new WindowManager.LayoutParams(
+			WindowManager.LayoutParams.WRAP_CONTENT,
+			WindowManager.LayoutParams.WRAP_CONTENT,
+			WindowManager.LayoutParams.TYPE_PHONE,
+			WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+					| WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+			PixelFormat.TRANSLUCENT);
+
+	static {
+		LAYOUT_PARAMS.gravity = Gravity.TOP | Gravity.START;
+		LAYOUT_PARAMS.x = 3;
+		LAYOUT_PARAMS.y = 180;
+	}
+
+	private Runnable autoHideRunnable;
+//===================================================
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		initBubble();
 
 		ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 		if (clipboardManager != null)
-			clipboardManager
-					.addPrimaryClipChangedListener(() -> {
-						if (clipboardManager.hasPrimaryClip()) {
-							showBubble(clipboardManager.getPrimaryClip().getItemAt(0).getText());
-						}
-					});
-		MobileAds.initialize(this, AD_MPB_APP_ID);
+			clipboardManager.addPrimaryClipChangedListener(() -> {
+				if (clipboardManager.hasPrimaryClip()) {
+					if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("copy_key", true))
+						showBubble(clipboardManager.getPrimaryClip().getItemAt(0).getText());
+				}
+			});
+
+		if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
+			MobileAds.initialize(this, ADMOB_APP_ID);
 	}
 //===================================================
 
+	private void initBubble() {
+		bubble = new ImageView(this);
+		bubble.setImageResource(R.drawable.ic_bubble);
+	}
+
 	public void showBubble(CharSequence query) {
+		bubble.removeCallbacks(autoHideRunnable);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		long duration = Long.parseLong(preferences.getString("duration", "6")) * 1000;
 
 		WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-		ImageView bubble = new ImageView(this);
-		bubble.setImageResource(R.drawable.ic_bubble);
+		try {
+			windowManager.removeView(bubble);
+		} catch (Exception e) {//nah.
+			Log.e("hmmmmmmmm", e.fillInStackTrace().toString());
+		} finally {
+			windowManager.addView(bubble, LAYOUT_PARAMS);
+		}
+
 		bubble.setOnClickListener(view -> {
-			showing = false;
 			windowManager.removeView(bubble);
 			startQQActivity(query);
 		});
 		bubble.setOnLongClickListener(view -> {//hide bubble
-			showing = false;
 			windowManager.removeView(bubble);
 			return true;
 		});
 
-		WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-				WindowManager.LayoutParams.WRAP_CONTENT,
-				WindowManager.LayoutParams.WRAP_CONTENT,
-				WindowManager.LayoutParams.TYPE_PHONE,
-				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-						| WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-		PixelFormat.TRANSLUCENT);
+		removeBubbleDelayed(windowManager, duration);
+	}
 
-		params.gravity = Gravity.TOP | Gravity.START;
-		params.x = 3;
-		params.y = 180;
-
-		showing = true; //show bubble
-		windowManager.addView(bubble, params);
-
-		bubble.postDelayed(() -> { //auto-hide bubble
-			if (showing) {
-				showing = false;
+	private void removeBubbleDelayed(WindowManager windowManager, long duration) {
+		autoHideRunnable = () -> { //auto-hide bubble
+			try {
 				windowManager.removeView(bubble);
+			} catch (Exception e) {
+				Log.e("hmmmmmmmm", e.fillInStackTrace().toString());
 			}
-		}, 6000);
+		};
+		if (duration != 0)
+			bubble.postDelayed(autoHideRunnable, duration);
 	}
 //===================================================
 

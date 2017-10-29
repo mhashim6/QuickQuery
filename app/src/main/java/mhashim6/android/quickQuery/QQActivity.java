@@ -1,9 +1,11 @@
 package mhashim6.android.quickQuery;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,11 @@ import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
+import java.util.Collections;
+import java.util.Set;
+
+import static mhashim6.android.quickQuery.ClipboardMonitor.FLAVOR_FULL;
 
 
 public class QQActivity extends AppCompatActivity {
@@ -28,23 +35,28 @@ public class QQActivity extends AppCompatActivity {
 	private static final String PLUS_SIGN = "+";
 	private static final String YOUTUBE_PACKAGE = "com.google.android.youtube";
 
+	private String[] allEngines;
+
+	private SharedPreferences preferences;
+
 	private static AdRequest adRequest;
 	private AdView adView;
 
 	private String query;
-	private String dialogTitle;
 //===================================================
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		allEngines = getResources().getStringArray(R.array.engines);
 
 		Intent starter = getIntent();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Intent.ACTION_PROCESS_TEXT.equals(starter.getAction()))
 			query = starter.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString();
 		else
 			query = starter.getCharSequenceExtra(Intent.EXTRA_TEXT).toString();
-		dialogTitle = getResources().getString(R.string.app_name) + " | " + query; //TODO
+
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 		requestAds();
 		showDialog();
@@ -68,10 +80,10 @@ public class QQActivity extends AppCompatActivity {
 	private void showDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setTitle(dialogTitle)
+		builder.setTitle(query)
 				.setView(inflateDialogView())
 				.setIcon(R.drawable.ic_bubble)
-				.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
+				//.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
 				.setOnCancelListener(dialogInterface -> finish())
 				.show().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT); //Controlling width and height.
 	}
@@ -80,35 +92,39 @@ public class QQActivity extends AppCompatActivity {
 		LayoutInflater inflater = this.getLayoutInflater();
 		View dialogView = inflater.inflate(R.layout.qq_dialog, null);
 
+		/*AdView*/
+		if (!BuildConfig.FLAVOR.equals(FLAVOR_FULL)) {
+			adView = dialogView.findViewById(R.id.adView);
+			adView.loadAd(adRequest);
+		}
+
 		/*ListView*/
 		ListView enginesListView = dialogView.findViewById(R.id.engines_list_view);
+		Set<String> engines = preferences.getStringSet("engines", Collections.emptySet());
+		String[] enginesArray = new String[engines.size()];
 
+		for (int i = 0, j = 0; i < allEngines.length; i++) { //for order.
+			String engine = allEngines[i];
+			if (engines.contains(engine)) {
+				enginesArray[j] = engine;
+				j++;
+			}
+		}
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
-				android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.engines));
+				android.R.layout.simple_list_item_1,
+				enginesArray);
 		enginesListView.setAdapter(arrayAdapter);
 		enginesListView.setOnItemClickListener((adapterView, view, pos, id) -> {
-			switch (pos) {
-				case 0:
-					google(query);
-					break;
-
-				case 1:
-					duck(query);
-					break;
-
-				case 2:
-					youtube(query);
-					break;
-
-				case 3:
-					googlePlay(query);
-					break;
-			}
+			String selected = enginesArray[pos];
+			if ("Google".equals(selected))
+				google(query);
+			else if ("DuckDuckGo".equals(selected))
+				duck(query);
+			else if ("YouTube".equals(selected))
+				youtube(query);
+			else if ("Google Play".equals(selected))
+				googlePlay(query);
 		});
-
-		/*AdView*/
-		adView = dialogView.findViewById(R.id.adView);
-		adView.loadAd(adRequest);
 
 		return dialogView;
 	}

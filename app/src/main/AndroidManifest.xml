@@ -8,7 +8,8 @@
 	<uses-permission android:name="android.permission.GET_CLIPS"/>
 	<uses-permission android:name="android.permission.READ_CLIPS"/>
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-	<uses-permission     android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
+	<uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION"/>
+
 
 	<application
 		android:allowBackup="false"
@@ -23,7 +24,8 @@
 			android:value="@integer/google_play_services_version"/>
 
 		<activity
-			android:name=".MainActivity">
+			android:name=".MainActivity"
+			android:theme="@style/AppTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
@@ -33,8 +35,7 @@
 		<activity
 			android:name=".QQActivity"
 			android:excludeFromRecents="true"
-			android:noHistory="true"
-			android:windowSoftInputMode="stateAlwaysHidden">
+			android:noHistory="true">
 			<intent-filter>
 				<action android:name="android.intent.action.PROCESS_TEXT"/>
 				<category android:name="android.intent.category.DEFAULT"/>
