@@ -85,6 +85,8 @@ public class QQActivity extends AppCompatActivity {
 				.setIcon(R.drawable.ic_bubble)
 				//.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
 				.setOnCancelListener(dialogInterface -> finish())
+				.setPositiveButton(R.string.settings,
+						(dialogInterface, i) -> startActivity(new Intent(this, MainActivity.class)))
 				.show().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT); //Controlling width and height.
 	}
 

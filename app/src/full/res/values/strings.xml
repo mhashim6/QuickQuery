@@ -16,4 +16,6 @@
 	<string name="pro_summary">Unlock all features, Remove ads, and Support the developer</string>
 	<string name="functionality">Functionality</string>
 	<string name="engines_title">Select Search Engines</string>
+	<string name="rate">Rate</string>
+	<string name="settings">Settings</string>
 </resources>

@@ -1,14 +1,21 @@
 package mhashim6.android.quickQuery;
 
 
+import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
+import android.widget.Toast;
 
 import static mhashim6.android.quickQuery.ClipboardMonitor.FLAVOR_FULL;
 import static mhashim6.android.quickQuery.MainActivity.GOOGLE_PLAY_LINK_PRO;
@@ -23,9 +30,10 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 	public static final String COPY_KEY = "copy_key";
 	public static final String PRO_VERSION = "pro";
 
+	public final static int PERMISSIONS_REQUEST_CODE = 65235;
+
 	private Preference tapToTest;
 	private Preference autohide;
-	private Preference proVersion;
 
 	public PreferencesFragment() {
 		// Required empty public constructor
@@ -51,7 +59,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 		if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
 			autohide.setEnabled(preferences.getBoolean(COPY_KEY, false));
 		else {
-			proVersion = findPreference(PRO_VERSION);
+			Preference proVersion = findPreference(PRO_VERSION);
 			proVersion.setOnPreferenceClickListener(preference -> {
 				((MainActivity) getActivity()).openWebPage(GOOGLE_PLAY_LINK_PRO);
 				return true;
@@ -63,11 +71,40 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals(COPY_KEY)) {
 			boolean value = sharedPreferences.getBoolean(key, false);
+
 			tapToTest.setEnabled(value);
 			if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
 				autohide.setEnabled(value);
+
+			if (value) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+					checkDrawOverlayPermission();
+			}
 		}
 	}
 //===================================================
+
+	@RequiresApi(api = Build.VERSION_CODES.M)
+	void checkDrawOverlayPermission() {
+		if (!Settings.canDrawOverlays(getContext())) {
+			Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+					Uri.parse("package:" + getContext().getApplicationContext().getPackageName()));
+			startActivityForResult(intent, PERMISSIONS_REQUEST_CODE);
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.M)
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == PERMISSIONS_REQUEST_CODE) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				if (!Settings.canDrawOverlays(getContext())) {
+					Toast.makeText(getContext(), R.string.permissions_fail, Toast.LENGTH_LONG).show();
+					PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(COPY_KEY, false).apply();
+				}
+			}
+		}
+	}
+	//===================================================
 
 }
