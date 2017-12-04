@@ -3,10 +3,15 @@
 	  xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<item
-		android:icon="@drawable/ic_rate_review_white_24dp"
-		android:title="@string/rate"
 		android:id="@+id/rate_item"
+		android:icon="@drawable/ic_rate_review_white_18dp"
+		android:title="@string/rate"
 		app:showAsAction="ifRoom"
 		/>
 
+	<item
+		android:id="@+id/donate_item"
+		android:title="@string/donate"
+		android:icon="@drawable/ic_gift_white_18dp"
+		app:showAsAction="ifRoom"/>
 </menu>

@@ -7,8 +7,8 @@ android {
         applicationId "mhashim6.android.quickQuery"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 3
-        versionName "1.1.0.0"
+        versionCode 4
+        versionName "1.2.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "en"
     }
@@ -50,7 +50,6 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:support-v4:26.1.0'
-    compile 'com.google.android.gms:play-services-ads:11.4.2'
     testCompile 'junit:junit:4.12'
 
     repositories {
@@ -59,6 +58,4 @@ dependencies {
             url "https://maven.google.com"
         }
     }
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:support-v4:26.1.0'
 }

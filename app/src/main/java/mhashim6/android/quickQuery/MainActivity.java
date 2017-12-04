@@ -1,24 +1,23 @@
 package mhashim6.android.quickQuery;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-
-import static mhashim6.android.quickQuery.Utils.FLAVOR_FULL;
-import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK;
 import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
 
 public class MainActivity extends AppCompatActivity {
 
-	private InterstitialAd interstitialAd;
+	public final static int PERMISSIONS_REQUEST_CODE = 65235;
+	//private InterstitialAd interstitialAd;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +26,13 @@ public class MainActivity extends AppCompatActivity {
 		getFragmentManager().beginTransaction().replace(R.id.content_frame, new PreferencesFragment()).commit();
 		initToolbar();
 
-		Intent clipboardMonitorStarter = new Intent(this, ClipboardMonitor.class);
-		startService(clipboardMonitorStarter);
+		checkForPermissions();
 
-		if (!BuildConfig.FLAVOR.equals(FLAVOR_FULL))
+		startClipboardService();
+
+		/*if (!BuildConfig.FLAVOR.equals(FLAVOR_FULL))
 			initAds();
+			*/
 	}
 
 	private void initToolbar() {
@@ -39,9 +40,48 @@ public class MainActivity extends AppCompatActivity {
 		toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
 		setSupportActionBar(toolbar);
 	}
+
 //===================================================
 
-	private void initAds() {
+	private void checkForPermissions() {
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+				&& !Settings.canDrawOverlays(this)) {
+
+			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+			dialog.setTitle(R.string.request_permissions);
+			dialog.setPositiveButton(R.string.allow, (dialogInterface, i) -> requestDrawOverlayPermission());
+			dialog.setNegativeButton(R.string.deny, (dialogInterface, i) -> finish());
+			dialog.setOnCancelListener(dialogInterface -> finish());
+			dialog.show();
+		}
+	}
+
+	@RequiresApi(api = Build.VERSION_CODES.M)
+	private void requestDrawOverlayPermission() {
+		Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+				Uri.parse("package:" + this.getApplicationContext().getPackageName()));
+		startActivityForResult(intent, PERMISSIONS_REQUEST_CODE);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == PERMISSIONS_REQUEST_CODE) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				if (!Settings.canDrawOverlays(this))
+					finish();
+			}
+		}
+	}
+	//===================================================
+
+	private void startClipboardService() {
+		Intent clipboardMonitorStarter = new Intent(this, ClipboardMonitor.class);
+		startService(clipboardMonitorStarter);
+	}
+//===================================================
+
+	/*private void initAds() {
 		requestAds(); //banner
 		interstitialAd = new InterstitialAd(this);
 		interstitialAd.setAdUnitId("ca-app-pub-1801049179059842/5610177963");
@@ -63,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 		AdRequest adRequest = adRequestBuilder.build();
 		AdView adView = findViewById(R.id.adView);
 		adView.loadAd(adRequest);
-	}
+	}*/
 //===================================================
 
 	@Override
@@ -72,9 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
 		MenuItem rate = menu.findItem(R.id.rate_item);
 		rate.setOnMenuItemClickListener(item -> {
-			Utils.openWebPage(this, BuildConfig.FLAVOR.equals(FLAVOR_FULL) ?
-					GOOGLE_PLAY_LINK_PRO
-					: GOOGLE_PLAY_LINK);
+			Utils.openWebPage(this, GOOGLE_PLAY_LINK_PRO);
 			return true;
 		});
 		return super.onCreateOptionsMenu(menu);

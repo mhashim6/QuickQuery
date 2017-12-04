@@ -15,13 +15,9 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import java.util.Collections;
 import java.util.Set;
 
-import static mhashim6.android.quickQuery.Utils.FLAVOR_FULL;
 import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
 import static mhashim6.android.quickQuery.Utils.openWebPage;
 
@@ -41,8 +37,8 @@ public class QQActivity extends AppCompatActivity {
 
 	private SharedPreferences preferences;
 
-	private static AdRequest adRequest;
-	private AdView adView;
+	//private static AdRequest adRequest;
+	//private AdView adView;
 
 	private String query;
 //===================================================
@@ -60,12 +56,12 @@ public class QQActivity extends AppCompatActivity {
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		requestAds();
+		//requestAds();
 		showDialog();
 	}
 //===================================================
 
-	private void requestAds() {
+/*	private void requestAds() {
 		String[] keywords = query.split(MULTIPLE_SPACES);
 
 		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
@@ -76,7 +72,7 @@ public class QQActivity extends AppCompatActivity {
 			adRequestBuilder.addKeyword(keyword);
 
 		adRequest = adRequestBuilder.build();
-	}
+	}*/
 //===================================================
 
 	private void showDialog() {
@@ -95,12 +91,12 @@ public class QQActivity extends AppCompatActivity {
 		LayoutInflater inflater = this.getLayoutInflater();
 		View dialogView = inflater.inflate(R.layout.qq_dialog, null);
 
-		/*AdView*/
+		/*
 		if (!BuildConfig.FLAVOR.equals(FLAVOR_FULL)) {
 			adView = dialogView.findViewById(R.id.adView);
 			adView.loadAd(adRequest);
 		}
-
+*/
 		/*ListView*/
 		ListView enginesListView = dialogView.findViewById(R.id.engines_list_view);
 		Set<String> engines = preferences.getStringSet("engines", Collections.emptySet());
