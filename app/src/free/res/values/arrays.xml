@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<string-array name="engines">
+		<item>Google</item>
+		<item>DuckDuckGo (PRO)</item>
+		<item>YouTube</item>
+		<item>Google Play (PRO)</item>
+	</string-array>
+
 	<string-array name="engines_values">
 		<item>Google</item>
+		<item>DuckDuckGo (PRO)</item>
 		<item>YouTube</item>
+		<item>Google Play (PRO)</item>
 	</string-array>
 </resources>

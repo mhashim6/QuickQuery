@@ -1,7 +1,6 @@
 package mhashim6.android.quickQuery;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,12 +12,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
-import static mhashim6.android.quickQuery.ClipboardMonitor.FLAVOR_FULL;
+import static mhashim6.android.quickQuery.Utils.FLAVOR_FULL;
+import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK;
+import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
 
 public class MainActivity extends AppCompatActivity {
-
-	public static final String GOOGLE_PLAY_LINK = "market://details?id=mhashim6.android.quickQuery";
-	public static final String GOOGLE_PLAY_LINK_PRO = "market://details?id=mhashim6.android.quickQuery.full";
 
 	private InterstitialAd interstitialAd;
 
@@ -47,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 		requestAds(); //banner
 		interstitialAd = new InterstitialAd(this);
 		interstitialAd.setAdUnitId("ca-app-pub-1801049179059842/5610177963");
-		interstitialAd.loadAd(new AdRequest.Builder().addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F").build());
+		interstitialAd.loadAd(new AdRequest.Builder().build());
+				//.addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F").build());
 		interstitialAd.setAdListener(new AdListener() {
 			@Override
 			public void onAdLoaded() {
@@ -58,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
 	private void requestAds() {
 		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-		adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-				.addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F");
+		adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+			//	.addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F");
 
 		AdRequest adRequest = adRequestBuilder.build();
 		AdView adView = findViewById(R.id.adView);
@@ -73,17 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
 		MenuItem rate = menu.findItem(R.id.rate_item);
 		rate.setOnMenuItemClickListener(item -> {
-			openWebPage(BuildConfig.FLAVOR.equals(FLAVOR_FULL) ?
+			Utils.openWebPage(this, BuildConfig.FLAVOR.equals(FLAVOR_FULL) ?
 					GOOGLE_PLAY_LINK_PRO
 					: GOOGLE_PLAY_LINK);
 			return true;
 		});
 		return super.onCreateOptionsMenu(menu);
-	}
-
-	final void openWebPage(String url) {
-		Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-		startActivity(webIntent);
 	}
 //===================================================
 

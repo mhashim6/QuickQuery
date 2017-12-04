@@ -21,7 +21,9 @@ import com.google.android.gms.ads.AdView;
 import java.util.Collections;
 import java.util.Set;
 
-import static mhashim6.android.quickQuery.ClipboardMonitor.FLAVOR_FULL;
+import static mhashim6.android.quickQuery.Utils.FLAVOR_FULL;
+import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
+import static mhashim6.android.quickQuery.Utils.openWebPage;
 
 
 public class QQActivity extends AppCompatActivity {
@@ -67,8 +69,8 @@ public class QQActivity extends AppCompatActivity {
 		String[] keywords = query.split(MULTIPLE_SPACES);
 
 		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-		adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-				.addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F");
+		adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+				//.addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F");
 
 		for (String keyword : keywords)
 			adRequestBuilder.addKeyword(keyword);
@@ -85,8 +87,7 @@ public class QQActivity extends AppCompatActivity {
 				.setIcon(R.drawable.ic_bubble)
 				//.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
 				.setOnCancelListener(dialogInterface -> finish())
-				.setPositiveButton(R.string.settings,
-						(dialogInterface, i) -> startActivity(new Intent(this, MainActivity.class)))
+				//.setPositiveButton(R.string.settings,(dialogInterface, i) -> startActivity(new Intent(this, MainActivity.class)))
 				.show().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT); //Controlling width and height.
 	}
 
@@ -126,6 +127,9 @@ public class QQActivity extends AppCompatActivity {
 				youtube(query);
 			else if ("Google Play".equals(selected))
 				googlePlay(query);
+			else {
+				openWebPage(this, GOOGLE_PLAY_LINK_PRO);
+			}
 		});
 
 		return dialogView;

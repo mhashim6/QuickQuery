@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import com.google.android.gms.ads.MobileAds;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static mhashim6.android.quickQuery.Utils.ADMOB_APP_ID;
+import static mhashim6.android.quickQuery.Utils.FLAVOR_FULL;
+import static mhashim6.android.quickQuery.Utils.QUICK_QUERY_ACTION;
 
 
 /**
@@ -23,10 +26,6 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
  */
 
 public class ClipboardMonitor extends Service {
-
-	private static final String QUICK_QUERY_ACTION = "QUICK_QUERY_ACTION";
-	private static final String ADMOB_APP_ID = "ca-app-pub-1801049179059842~3245591274";
-	public static final String FLAVOR_FULL = "full";
 
 	private ImageView bubble;
 	private static final WindowManager.LayoutParams LAYOUT_PARAMS = new WindowManager.LayoutParams(

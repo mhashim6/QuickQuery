@@ -17,8 +17,8 @@ import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.widget.Toast;
 
-import static mhashim6.android.quickQuery.ClipboardMonitor.FLAVOR_FULL;
-import static mhashim6.android.quickQuery.MainActivity.GOOGLE_PLAY_LINK_PRO;
+import static mhashim6.android.quickQuery.Utils.FLAVOR_FULL;
+import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
 
 
 /**
@@ -61,7 +61,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 		else {
 			Preference proVersion = findPreference(PRO_VERSION);
 			proVersion.setOnPreferenceClickListener(preference -> {
-				((MainActivity) getActivity()).openWebPage(GOOGLE_PLAY_LINK_PRO);
+				Utils.openWebPage(getActivity(), GOOGLE_PLAY_LINK_PRO);
 				return true;
 			});
 		}
