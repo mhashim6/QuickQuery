@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import static mhashim6.android.quickQuery.Utils.DONATE_LINK;
 import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 		initToolbar();
 
 		checkForPermissions();
-
 		startClipboardService();
 
 		/*if (!BuildConfig.FLAVOR.equals(FLAVOR_FULL))
@@ -113,6 +113,12 @@ public class MainActivity extends AppCompatActivity {
 		MenuItem rate = menu.findItem(R.id.rate_item);
 		rate.setOnMenuItemClickListener(item -> {
 			Utils.openWebPage(this, GOOGLE_PLAY_LINK_PRO);
+			return true;
+		});
+
+		MenuItem donate = menu.findItem(R.id.donate_item);
+		donate.setOnMenuItemClickListener(item -> {
+			Utils.openWebPage(this, DONATE_LINK);
 			return true;
 		});
 		return super.onCreateOptionsMenu(menu);

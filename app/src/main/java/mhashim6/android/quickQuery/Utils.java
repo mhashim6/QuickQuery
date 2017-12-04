@@ -15,6 +15,7 @@ class Utils {
 
 	static final String GOOGLE_PLAY_LINK = "market://details?id=mhashim6.android.quickQuery";
 	static final String GOOGLE_PLAY_LINK_PRO = "market://details?id=mhashim6.android.quickQuery.full";
+	static final String DONATE_LINK = "http://paypal.com/paypalme/mhashim6";
 
 
 	static void openWebPage(Context context, String url) {
