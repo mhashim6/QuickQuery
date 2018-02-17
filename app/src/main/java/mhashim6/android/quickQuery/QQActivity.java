@@ -9,6 +9,9 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -79,8 +82,7 @@ public class QQActivity extends AppCompatActivity {
 	private void showDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setTitle(query)
-				.setView(inflateDialogView())
+		builder.setView(inflateDialogView())
 				.setIcon(R.drawable.ic_bubble)
 				//.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
 				.setOnCancelListener(dialogInterface -> finish())
@@ -98,6 +100,27 @@ public class QQActivity extends AppCompatActivity {
 			adView.loadAd(adRequest);
 		}
 */
+
+		/*query*/
+		AppCompatEditText queryEditText = dialogView.findViewById(R.id.query_edit_text);
+		queryEditText.setText(query);
+		queryEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence newQuery, int i, int i1, int i2) {
+				query = newQuery.toString();
+			}
+
+			@Override
+			public void afterTextChanged(Editable editable) {
+
+			}
+		});
+
 		/*ListView*/
 		ListView enginesListView = dialogView.findViewById(R.id.engines_list_view);
 		Set<String> engines = preferences.getStringSet("engines", Collections.emptySet());
