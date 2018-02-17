@@ -10,8 +10,9 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@null"
+		android:maxLines="4"
 		android:padding="10dp"
-		android:textColor="@color/colorPrimary"
+		android:textColor="@color/colorPrimaryDark"
 		tools:text="Test Text!"/>
 
 	<ListView

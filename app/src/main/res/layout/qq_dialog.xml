@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent"
 			  android:orientation="vertical">
 
 	<android.support.v7.widget.AppCompatEditText
 		android:id="@+id/query_edit_text"
-		tools:text="Test Text!"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@null"
+		android:maxLines="4"
 		android:padding="10dp"
-		android:textColor="@color/colorPrimary"/>
+		android:textColor="@color/colorPrimary"
+		tools:text="Test Text!"/>
 
 	<ListView
 		android:id="@+id/engines_list_view"
