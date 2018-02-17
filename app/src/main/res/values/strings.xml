@@ -23,4 +23,5 @@
 	<string name="allow">Allow</string>
 	<string name="deny">Deny</string>
 	<string name="request_permissions">Overlay Permissions Required</string>
+	<string name="running">QuickQuery is running</string>
 </resources>

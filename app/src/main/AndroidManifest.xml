@@ -3,7 +3,6 @@
 		  package="mhashim6.android.quickQuery">
 
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-	<uses-permission android:name="android.permission.WAKE_LOCK"/>
 	<uses-permission android:name="android.permission.GET_CLIPS"/>
 	<uses-permission android:name="android.permission.READ_CLIPS"/>
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -62,9 +61,7 @@
 			</intent-filter>
 		</receiver>
 
-		<service
-			android:name=".ClipboardMonitor"
-			android:permission="android.permission.BIND_JOB_SERVICE"/>
+		<service android:name=".ClipboardMonitor"/>
 	</application>
 
 </manifest>
