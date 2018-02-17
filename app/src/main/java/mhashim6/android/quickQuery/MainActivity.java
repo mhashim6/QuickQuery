@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import static mhashim6.android.quickQuery.Utils.COPY_KEY;
 import static mhashim6.android.quickQuery.Utils.DONATE_LINK;
 import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
 
@@ -27,8 +29,17 @@ public class MainActivity extends AppCompatActivity {
 		getFragmentManager().beginTransaction().replace(R.id.content_frame, new PreferencesFragment()).commit();
 		initToolbar();
 
-		checkForPermissions();
-		startClipboardService();
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(COPY_KEY, false))
+			startClipboardService();
+
+		PreferenceManager.getDefaultSharedPreferences(this).
+				registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+					if (key.equals(COPY_KEY))
+						if (sharedPreferences.getBoolean(COPY_KEY, true)) {
+							startCopyToLaunch();
+						} else
+							stopClipboardService();
+				});
 
 		/*if (!BuildConfig.FLAVOR.equals(FLAVOR_FULL))
 			initAds();
@@ -40,40 +51,44 @@ public class MainActivity extends AppCompatActivity {
 		toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
 		setSupportActionBar(toolbar);
 	}
-
 //===================================================
 
-	private void checkForPermissions() {
+	private void startCopyToLaunch() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-				&& !Settings.canDrawOverlays(this)) {
+			if (Settings.canDrawOverlays(this))
+				startClipboardService();
 
-			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-			dialog.setTitle(R.string.request_permissions);
-			dialog.setPositiveButton(R.string.allow, (dialogInterface, i) -> requestDrawOverlayPermission());
-			dialog.setNegativeButton(R.string.deny, (dialogInterface, i) -> finish());
-			dialog.setOnCancelListener(dialogInterface -> finish());
-			dialog.show();
-		}
+			else {
+				AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+				dialog.setTitle(R.string.request_permissions);
+				dialog.setPositiveButton(R.string.grant, (dialogInterface, i) -> requestDrawOverlayPermission());
+				dialog.setNegativeButton(R.string.deny, (dialogInterface, i) -> disableCopyToLaunch());
+				dialog.setOnCancelListener(dialogInterface -> disableCopyToLaunch());
+				dialog.show();
+			}
 	}
+
+	private void disableCopyToLaunch() {
+		PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(COPY_KEY, false).apply();
+	}
+//===================================================
 
 	@RequiresApi(api = Build.VERSION_CODES.M)
 	private void requestDrawOverlayPermission() {
-		Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-				Uri.parse("package:" + this.getApplicationContext().getPackageName()));
+		Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + this.getApplicationContext().getPackageName()));
 		startActivityForResult(intent, PERMISSIONS_REQUEST_CODE);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == PERMISSIONS_REQUEST_CODE) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				if (!Settings.canDrawOverlays(this))
-					finish();
-			}
-		}
+		if (requestCode == PERMISSIONS_REQUEST_CODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+			if (Settings.canDrawOverlays(this))
+				startClipboardService();
+			else
+				disableCopyToLaunch();
 	}
-	//===================================================
+//===================================================
 
 	private void startClipboardService() {
 		Intent clipboardMonitorStarter = new Intent(this, ClipboardMonitor.class);
@@ -81,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
 			startForegroundService(clipboardMonitorStarter);
 		else
 			startService(clipboardMonitorStarter);
+	}
+
+	private void stopClipboardService() {
+		Intent clipboardMonitorStarter = new Intent(this, ClipboardMonitor.class);
+		stopService(clipboardMonitorStarter);
 	}
 //===================================================
 

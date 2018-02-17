@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.preference.PreferenceManager;
+
+import static mhashim6.android.quickQuery.Utils.COPY_KEY;
 
 /**
  * Created by mhashim6 on 25/10/2017.
@@ -12,10 +15,12 @@ import android.os.Build;
 public class BootBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Intent clipboardMonitorStarter = new Intent(context, ClipboardMonitor.class);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-			context.startForegroundService(clipboardMonitorStarter);
-		else
-			context.startService(clipboardMonitorStarter);
+		if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(COPY_KEY, false)) {
+			Intent clipboardMonitorStarter = new Intent(context, ClipboardMonitor.class);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+				context.startForegroundService(clipboardMonitorStarter);
+			else
+				context.startService(clipboardMonitorStarter);
+		}
 	}
 }

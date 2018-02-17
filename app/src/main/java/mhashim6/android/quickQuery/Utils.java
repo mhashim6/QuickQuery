@@ -13,9 +13,11 @@ class Utils {
 //	public static final String ADMOB_APP_ID = "ca-app-pub-1801049179059842~3245591274";
 //	static final String FLAVOR_FULL = "full";
 
-	static final String GOOGLE_PLAY_LINK = "market://details?id=mhashim6.android.quickQuery";
+	//static final String GOOGLE_PLAY_LINK = "market://details?id=mhashim6.android.quickQuery";
 	static final String GOOGLE_PLAY_LINK_PRO = "market://details?id=mhashim6.android.quickQuery.full";
 	static final String DONATE_LINK = "http://paypal.com/paypalme/mhashim6";
+
+	static final String COPY_KEY = "copy_key";
 
 
 	static void openWebPage(Context context, String url) {

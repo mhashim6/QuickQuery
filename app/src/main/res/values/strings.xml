@@ -20,8 +20,8 @@
 	<string name="settings">Settings</string>
 	<string name="permissions_fail">Permissions Denied!</string>
 	<string name="donate">Donate</string>
-	<string name="allow">Allow</string>
+	<string name="grant">Grant</string>
 	<string name="deny">Deny</string>
-	<string name="request_permissions">Overlay Permissions Required</string>
-	<string name="running">QuickQuery is running</string>
+	<string name="request_permissions">QuickQuery requires Overlay Permissions</string>
+	<string name="running">Copy to Launch is running</string>
 </resources>

@@ -36,8 +36,6 @@ public class ClipboardMonitor extends Service {
 	private static final int FOREGROUND_ID = 77;
 	private static final String CHANNEL_ID = "QUICK_QUERY_CHANNEL";
 
-	private ClipboardManager clipboardManager;
-
 	private ImageView bubble;
 	private static final WindowManager.LayoutParams LAYOUT_PARAMS = new WindowManager.LayoutParams(
 			WindowManager.LayoutParams.WRAP_CONTENT,
@@ -58,39 +56,33 @@ public class ClipboardMonitor extends Service {
 
 	@Override
 	public void onCreate() {
-		super.onCreate();
-		startForeground(FOREGROUND_ID, buildForegroundNotification());
 
-		clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		super.onCreate();
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			startForeground(FOREGROUND_ID, buildForegroundNotification());
+		else
+			Log.i("QuickQuery", "not oreo, skipping notification.");
+
 		initBubble();
 
-		if (clipboardManager != null)
-			clipboardManager.addPrimaryClipChangedListener(() -> {
-				if (clipboardManager.hasPrimaryClip())
-					if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("copy_key", true))
-						handleNewQuery(clipboardManager.getPrimaryClip().getItemAt(0).getText());
-			});
+		ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		clipboardManager.addPrimaryClipChangedListener(() -> handleNewQuery(clipboardManager.getPrimaryClip().getItemAt(0).getText()));
+
 		/*
 		if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
 			MobileAds.initialize(this, ADMOB_APP_ID);
 		*/
 	}
 
-	@Nullable
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
-
+	@TargetApi(26)
 	private Notification buildForegroundNotification() {
-		boolean isOreo = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-		if (isOreo)
-			createChannelForOreo();
+		createChannelForOreo();
 
 		Intent MainActivityStarter = new Intent(this, MainActivity.class);
 		PendingIntent notificationAction = PendingIntent.getActivity(this, 0, MainActivityStarter, 0);
 
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(this, isOreo ? CHANNEL_ID : "");
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
 		builder.setOngoing(true)
 				.setContentTitle(getString(R.string.app_name))
 				.setContentIntent(notificationAction)
@@ -174,5 +166,11 @@ public class ClipboardMonitor extends Service {
 		startActivity(qqStarter);
 	}
 //===================================================
+
+	@Nullable
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
 
 }

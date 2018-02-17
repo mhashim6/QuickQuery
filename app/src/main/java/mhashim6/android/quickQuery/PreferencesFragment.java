@@ -10,18 +10,18 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import static mhashim6.android.quickQuery.Utils.COPY_KEY;
+
 
 /**
  * Created by mhashim6 on 25/10/2017.
  */
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	public static final String AUTOHIDE_KEY = "duration";
-	public static final String COPY_KEY = "copy_key";
+	public static final String AUTO_HIDE_KEY = "duration";
 	//public static final String PRO_VERSION = "pro";
 
-
-	private Preference tapToTest, autohide;
+	private Preference tapToTest, autoHide;
 
 	public PreferencesFragment() {
 		// Required empty public constructor
@@ -43,9 +43,9 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 			return true;
 		});
 
-		autohide = findPreference(AUTOHIDE_KEY);
+		autoHide = findPreference(AUTO_HIDE_KEY);
 		//if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
-		autohide.setEnabled(preferences.getBoolean(COPY_KEY, false));
+		autoHide.setEnabled(preferences.getBoolean(COPY_KEY, false));
 		/*else {
 			Preference proVersion = findPreference(PRO_VERSION);
 			proVersion.setOnPreferenceClickListener(preference -> {
@@ -62,7 +62,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 
 			tapToTest.setEnabled(value);
 			//	if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
-			autohide.setEnabled(value);
+			autoHide.setEnabled(value);
 		}
 	}
 //===================================================

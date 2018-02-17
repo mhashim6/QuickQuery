@@ -2,7 +2,6 @@ package mhashim6.android.quickQuery;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -191,12 +190,7 @@ public class QQActivity extends AppCompatActivity {
 	}
 
 	private void webSearch(String engine, String query) {
-		Uri uri = Uri.parse(engine + query.trim().replaceAll(MULTIPLE_SPACES, PLUS_SIGN));
-		launchURI(uri);
+		Utils.openWebPage(this, engine + query.trim().replaceAll(MULTIPLE_SPACES, PLUS_SIGN));
 	}
 
-	private void launchURI(Uri uri) {
-		Intent i = new Intent(Intent.ACTION_VIEW, uri);
-		startActivity(i);
-	}
 }
