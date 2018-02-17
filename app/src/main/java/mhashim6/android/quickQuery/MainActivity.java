@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private void startClipboardService() {
 		Intent clipboardMonitorStarter = new Intent(this, ClipboardMonitor.class);
-		startService(clipboardMonitorStarter);
+		ClipboardMonitor.enqueueWork(this, clipboardMonitorStarter);
 	}
 //===================================================
 

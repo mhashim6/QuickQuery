@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Created by mhashim6 on 25/10/2017.
+ * Created by mhashim6 on 17/02/2018.
  */
 
-public class BootBroadcastReceiver extends BroadcastReceiver {
+public class UpdateBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Intent clipboardMonitorStarter = new Intent(context, ClipboardMonitor.class);

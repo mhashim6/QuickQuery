@@ -3,6 +3,7 @@
 		  package="mhashim6.android.quickQuery">
 
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
 	<uses-permission android:name="android.permission.GET_CLIPS"/>
 	<uses-permission android:name="android.permission.READ_CLIPS"/>
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -55,8 +56,15 @@
 				<action android:name="android.intent.action.BOOT_COMPLETED"/>
 			</intent-filter>
 		</receiver>
+		<receiver android:name=".UpdateBroadcastReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.MY_PACKAGE_REPLACED "/>
+			</intent-filter>
+		</receiver>
 
-		<service android:name=".ClipboardMonitor"/>
+		<service
+			android:name=".ClipboardMonitor"
+			android:permission="android.permission.BIND_JOB_SERVICE"/>
 	</application>
 
 </manifest>

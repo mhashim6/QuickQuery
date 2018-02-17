@@ -1,13 +1,13 @@
 package mhashim6.android.quickQuery;
 
-import android.app.Service;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -21,7 +21,11 @@ import static mhashim6.android.quickQuery.Utils.QUICK_QUERY_ACTION;
  * Created by mhashim6 on 25/10/2017.
  */
 
-public class ClipboardMonitor extends Service {
+public class ClipboardMonitor extends JobIntentService {
+
+	private static final int WORK_ID = 77;
+
+	private ClipboardManager clipboardManager;
 
 	private ImageView bubble;
 	private static final WindowManager.LayoutParams LAYOUT_PARAMS = new WindowManager.LayoutParams(
@@ -44,9 +48,21 @@ public class ClipboardMonitor extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 		initBubble();
 
-		ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		/*
+		if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
+			MobileAds.initialize(this, ADMOB_APP_ID);
+		*/
+	}
+
+	static void enqueueWork(Context context, Intent i) {
+		enqueueWork(context, ClipboardMonitor.class, WORK_ID, i);
+	}
+
+	@Override
+	protected void onHandleWork(@NonNull Intent intent) {
 		if (clipboardManager != null)
 			clipboardManager.addPrimaryClipChangedListener(() -> {
 				if (clipboardManager.hasPrimaryClip()) {
@@ -54,11 +70,6 @@ public class ClipboardMonitor extends Service {
 						showBubble(clipboardManager.getPrimaryClip().getItemAt(0).getText());
 				}
 			});
-
-		/*
-		if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
-			MobileAds.initialize(this, ADMOB_APP_ID);
-			*/
 	}
 //===================================================
 
@@ -115,9 +126,4 @@ public class ClipboardMonitor extends Service {
 	}
 //===================================================
 
-	@Nullable
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
 }
