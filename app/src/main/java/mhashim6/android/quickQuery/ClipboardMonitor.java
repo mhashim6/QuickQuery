@@ -13,6 +13,9 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static mhashim6.android.quickQuery.Utils.QUICK_QUERY_ACTION;
 
@@ -67,7 +70,7 @@ public class ClipboardMonitor extends JobIntentService {
 			clipboardManager.addPrimaryClipChangedListener(() -> {
 				if (clipboardManager.hasPrimaryClip()) {
 					if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("copy_key", true))
-						showBubble(clipboardManager.getPrimaryClip().getItemAt(0).getText());
+						handleNewQuery(clipboardManager.getPrimaryClip().getItemAt(0).getText());
 				}
 			});
 	}
@@ -76,6 +79,15 @@ public class ClipboardMonitor extends JobIntentService {
 	private void initBubble() {
 		bubble = new ImageView(this);
 		bubble.setImageResource(R.drawable.ic_bubble);
+	}
+//===================================================
+
+	private void handleNewQuery(CharSequence query) {
+		try {
+			URL url = new URL(query.toString()); //ignore if url.
+		} catch (MalformedURLException e) {
+			showBubble(query);
+		}
 	}
 
 	public void showBubble(CharSequence query) {

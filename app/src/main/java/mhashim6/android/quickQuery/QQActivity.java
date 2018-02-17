@@ -32,6 +32,7 @@ public class QQActivity extends AppCompatActivity {
 	private static final String MULTIPLE_SPACES = " +";
 	private static final String PLUS_SIGN = "+";
 	private static final String YOUTUBE_PACKAGE = "com.google.android.youtube";
+//	private static final String GOOGLE_IMAGE = "https://images.google.com/searchbyimage?image_url=";
 
 	private String[] allEngines;
 
@@ -139,13 +140,13 @@ public class QQActivity extends AppCompatActivity {
 		if (intent.resolveActivity(getPackageManager()) != null) {
 			startActivity(intent);
 		} else {
-			launchWebSearch(GOOGLE, query);
+			webSearch(GOOGLE, query);
 		}*/
-		launchWebSearch(GOOGLE, query);
+		webSearch(GOOGLE, query);
 	}
 
 	private void duck(String query) {
-		launchWebSearch(DUCK_DUCK_GO, query);
+		webSearch(DUCK_DUCK_GO, query);
 	}
 
 	private void youtube(String query) {
@@ -158,16 +159,20 @@ public class QQActivity extends AppCompatActivity {
 		if (intent.resolveActivity(getPackageManager()) != null) {
 			startActivity(intent);
 		} else { //youtube is not installed.
-			launchWebSearch(YOUTUBE, query);
+			webSearch(YOUTUBE, query);
 		}
 	}
 
 	private void googlePlay(String query) {
-		launchWebSearch(GOOGLE_PLAY, query);
+		webSearch(GOOGLE_PLAY, query);
 	}
 
-	private void launchWebSearch(String engine, String query) {
+	private void webSearch(String engine, String query) {
 		Uri uri = Uri.parse(engine + query.trim().replaceAll(MULTIPLE_SPACES, PLUS_SIGN));
+		launchURI(uri);
+	}
+
+	private void launchURI(Uri uri) {
 		Intent i = new Intent(Intent.ACTION_VIEW, uri);
 		startActivity(i);
 	}
