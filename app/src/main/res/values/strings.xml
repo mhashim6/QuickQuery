@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">Quick Query - Free</string>
+	<string name="app_name">Quick Query</string>
 
 	<string name="cancel">Cancel</string>
 	<string name="general">General</string>
@@ -11,11 +11,11 @@
 	<string name="test">Tap to Test</string>
 	<string name="copy_summary">When copying a text, a floating button Will show on the screen. Hold to dismiss</string>
 	<string name="hide_summary">Hides the floating bubble after the specified period (in Seconds).</string>
-	<string name="hide_title">Auto-hide delay(PRO)</string>
+	<string name="hide_title">Auto-hide delay</string>
 	<string name="pro_title">Pro Version</string>
 	<string name="pro_summary">Unlock all features, Remove ads, and Support the developer</string>
 	<string name="functionality">Functionality</string>
-	<string name="engines_title">Select Search Engines (PRO)</string>
+	<string name="engines_title">Select Search Engines</string>
 	<string name="rate">Rate</string>
 	<string name="settings">Settings</string>
 	<string name="permissions_fail">Permissions Denied!</string>

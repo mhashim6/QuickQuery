@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-
 	<PreferenceCategory
 		android:title="@string/clipboard">
 		<SwitchPreference
@@ -13,8 +12,7 @@
 			android:key="test"
 			android:title="@string/test"/>
 		<EditTextPreference
-			android:defaultValue="0"
-			android:enabled="false"
+			android:defaultValue="6"
 			android:inputType="number"
 			android:key="duration"
 			android:summary="@string/hide_summary"
@@ -25,14 +23,11 @@
 		android:title="@string/general">
 		<MultiSelectListPreference
 			android:defaultValue="@array/engines_values"
-			android:enabled="false"
+			android:entries="@array/engines"
+			android:entryValues="@array/engines_values"
 			android:key="engines"
 			android:title="@string/engines_title"/>
 
-		<Preference
-			android:key="pro"
-			android:summary="@string/pro_summary"
-			android:title="@string/pro_title"/>
 	</PreferenceCategory>
 
 </PreferenceScreen>

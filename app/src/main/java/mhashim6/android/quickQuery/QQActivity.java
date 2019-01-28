@@ -41,9 +41,6 @@ public class QQActivity extends AppCompatActivity {
 
 	private SharedPreferences preferences;
 
-	//private static AdRequest adRequest;
-	//private AdView adView;
-
 	private String query;
 //===================================================
 
@@ -60,23 +57,8 @@ public class QQActivity extends AppCompatActivity {
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		//requestAds();
 		showDialog();
 	}
-//===================================================
-
-/*	private void requestAds() {
-		String[] keywords = query.split(MULTIPLE_SPACES);
-
-		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-		adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-				//.addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F");
-
-		for (String keyword : keywords)
-			adRequestBuilder.addKeyword(keyword);
-
-		adRequest = adRequestBuilder.build();
-	}*/
 //===================================================
 
 	private void showDialog() {
@@ -93,13 +75,6 @@ public class QQActivity extends AppCompatActivity {
 	private View inflateDialogView() {
 		LayoutInflater inflater = this.getLayoutInflater();
 		View dialogView = inflater.inflate(R.layout.qq_dialog, null);
-
-		/*
-		if (!BuildConfig.FLAVOR.equals(FLAVOR_FULL)) {
-			adView = dialogView.findViewById(R.id.adView);
-			adView.loadAd(adRequest);
-		}
-*/
 
 		/*query*/
 		AppCompatEditText queryEditText = dialogView.findViewById(R.id.query_edit_text);
@@ -157,14 +132,6 @@ public class QQActivity extends AppCompatActivity {
 //===================================================
 
 	private void google(String query) {
-	/*	Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-		intent.putExtra(SearchManager.QUERY, query);
-
-		if (intent.resolveActivity(getPackageManager()) != null) {
-			startActivity(intent);
-		} else {
-			webSearch(GOOGLE, query);
-		}*/
 		webSearch(GOOGLE, query);
 	}
 

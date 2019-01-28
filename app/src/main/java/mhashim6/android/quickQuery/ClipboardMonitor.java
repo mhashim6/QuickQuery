@@ -66,11 +66,6 @@ public class ClipboardMonitor extends Service {
 
 		ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 		clipboardManager.addPrimaryClipChangedListener(() -> handleNewQuery(clipboardManager.getPrimaryClip().getItemAt(0).getText()));
-
-		/*
-		if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
-			MobileAds.initialize(this, ADMOB_APP_ID);
-		*/
 	}
 //===================================================
 

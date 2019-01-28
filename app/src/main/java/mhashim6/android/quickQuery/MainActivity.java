@@ -21,7 +21,6 @@ import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
 public class MainActivity extends AppCompatActivity {
 
 	public final static int PERMISSIONS_REQUEST_CODE = 65235;
-	//private InterstitialAd interstitialAd;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +40,6 @@ public class MainActivity extends AppCompatActivity {
 						} else
 							stopClipboardService();
 				});
-
-		/*if (!BuildConfig.FLAVOR.equals(FLAVOR_FULL))
-			initAds();
-			*/
 	}
 
 	private void initToolbar() {
@@ -103,31 +98,6 @@ public class MainActivity extends AppCompatActivity {
 		Intent clipboardMonitorStarter = new Intent(this, ClipboardMonitor.class);
 		stopService(clipboardMonitorStarter);
 	}
-//===================================================
-
-	/*private void initAds() {
-		requestAds(); //banner
-		interstitialAd = new InterstitialAd(this);
-		interstitialAd.setAdUnitId("ca-app-pub-1801049179059842/5610177963");
-		interstitialAd.loadAd(new AdRequest.Builder().build());
-				//.addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F").build());
-		interstitialAd.setAdListener(new AdListener() {
-			@Override
-			public void onAdLoaded() {
-				interstitialAd.show();
-			}
-		});
-	}
-
-	private void requestAds() {
-		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-		adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-			//	.addTestDevice("5595A1D3B92A1BF4D4E4D1F164AD1A3F");
-
-		AdRequest adRequest = adRequestBuilder.build();
-		AdView adView = findViewById(R.id.adView);
-		adView.loadAd(adRequest);
-	}*/
 //===================================================
 
 	@Override

@@ -19,7 +19,6 @@ import static mhashim6.android.quickQuery.Utils.COPY_KEY;
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	public static final String AUTO_HIDE_KEY = "duration";
-	//public static final String PRO_VERSION = "pro";
 
 	private Preference tapToTest, autoHide;
 
@@ -44,15 +43,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 		});
 
 		autoHide = findPreference(AUTO_HIDE_KEY);
-		//if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
 		autoHide.setEnabled(preferences.getBoolean(COPY_KEY, false));
-		/*else {
-			Preference proVersion = findPreference(PRO_VERSION);
-			proVersion.setOnPreferenceClickListener(preference -> {
-				Utils.openWebPage(getActivity(), GOOGLE_PLAY_LINK_PRO);
-				return true;
-			});
-		}*/
 	}
 
 	@Override
@@ -61,7 +52,6 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 			boolean value = sharedPreferences.getBoolean(key, false);
 
 			tapToTest.setEnabled(value);
-			//	if (BuildConfig.FLAVOR.equals(FLAVOR_FULL))
 			autoHide.setEnabled(value);
 		}
 	}
