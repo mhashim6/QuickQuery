@@ -12,8 +12,6 @@ import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -22,6 +20,9 @@ import android.widget.ImageView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static mhashim6.android.quickQuery.Utils.IS_OREO;
