@@ -75,22 +75,12 @@ class QQActivity : AppCompatActivity() {
 
         /*ListView*/
         val enginesListView = dialogView.findViewById<ListView>(R.id.engines_list_view)
-        val engines = preferences.getStringSet("engines", emptySet())
-        val enginesArray = arrayOfNulls<String>(engines!!.size)
+        val engines = preferences.getStringSet("engines", emptySet())!!
+        val enginesArray = allEngines.intersect(engines).toTypedArray() // preserve original order of engines when displaying preferences' engines.
 
-        var i = 0
-        var j = 0
-        while (i < allEngines.size) { //for order.
-            val engine = allEngines[i]
-            if (engines.contains(engine)) {
-                enginesArray[j] = engine
-                j++
-            }
-            i++
-        }
         val arrayAdapter = ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
-                enginesArray)
+                allEngines.intersect(engines).toTypedArray())
         enginesListView.adapter = arrayAdapter
         enginesListView.setOnItemClickListener { adapterView, view, pos, id ->
             val selected = enginesArray[pos]
