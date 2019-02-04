@@ -66,6 +66,7 @@ public class QQActivity extends AppCompatActivity {
 
 		builder.setView(inflateDialogView())
 				.setIcon(R.drawable.ic_bubble)
+				.setTitle("Search for")
 				//.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
 				.setOnCancelListener(dialogInterface -> finish())
 				//.setPositiveButton(R.string.settings,(dialogInterface, i) -> startActivity(new Intent(this, MainActivity.class)))
