@@ -23,7 +23,7 @@ class QQActivity : AppCompatActivity() {
 
     private lateinit var preferences: SharedPreferences
 
-    private var query: String? = null
+    private var query: String = ""
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +46,7 @@ class QQActivity : AppCompatActivity() {
         builder.setView(inflateDialogView())
                 .setIcon(R.drawable.ic_bubble)
                 .setTitle("Search for")
-                //.setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
                 .setOnCancelListener { finish() }
-                //.setPositiveButton(R.string.settings,(dialogInterface, i) -> startActivity(new Intent(this, MainActivity.class)))
                 .show().window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT) //Controlling width and height.
     }
 
@@ -82,28 +80,20 @@ class QQActivity : AppCompatActivity() {
                 android.R.layout.simple_list_item_1,
                 allEngines.intersect(engines).toTypedArray())
         enginesListView.adapter = arrayAdapter
-        enginesListView.setOnItemClickListener { adapterView, view, pos, id ->
+        enginesListView.setOnItemClickListener { _, _, pos, _ ->
             val selected = enginesArray[pos]
             when (selected) {
-                "Google" -> google(query)
-                "DuckDuckGo" -> duck(query)
+                "Google" -> webSearch(GOOGLE, query)
+                "DuckDuckGo" -> webSearch(DUCK_DUCK_GO, query)
+                "Google Play" -> webSearch(GOOGLE_PLAY, query)
                 "YouTube" -> youtube(query)
-                "Google Play" -> googlePlay(query)
             }
         }
 
         return dialogView
     }
 
-    private fun google(query: String?) {
-        webSearch(GOOGLE, query!!)
-    }
-
-    private fun duck(query: String?) {
-        webSearch(DUCK_DUCK_GO, query!!)
-    }
-
-    private fun youtube(query: String?) {
+    private fun youtube(query: String) {
         val intent = Intent(Intent.ACTION_SEARCH)
         intent.setPackage(YOUTUBE_PACKAGE)
         intent.putExtra("query", query)
@@ -112,12 +102,8 @@ class QQActivity : AppCompatActivity() {
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         } else { //youtube is not installed.
-            webSearch(YOUTUBE, query!!)
+            webSearch(YOUTUBE, query)
         }
-    }
-
-    private fun googlePlay(query: String?) {
-        webSearch(GOOGLE_PLAY, query!!)
     }
 
     private fun webSearch(engine: String, query: String) {
