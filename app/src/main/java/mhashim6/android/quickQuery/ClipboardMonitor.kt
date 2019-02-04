@@ -59,9 +59,9 @@ class ClipboardMonitor : Service() {
     private fun handleNewQuery(query: CharSequence?) {
         query?.let {
             try {
-                URL(query.toString()) //ignore if url.
+                URL(it.toString()) //ignore if url.
             } catch (e: MalformedURLException) {
-                this.query = query
+                this.query = it
                 showNewBubble()
             }
         }
