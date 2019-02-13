@@ -22,7 +22,7 @@ android {
 
         debug {
             minifyEnabled false
-            versionNameSuffix '.debug'
+            applicationIdSuffix '.debug'
         }
     }
     compileOptions {
