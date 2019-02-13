@@ -107,7 +107,7 @@ class QQActivity : AppCompatActivity() {
     }
 
     private fun webSearch(engine: String, query: String) {
-        Utils.openWebPage(this, engine + query.trim { it <= ' ' }.replace(MULTIPLE_SPACES.toRegex(), PLUS_SIGN))
+        openWebPage(this, engine + query.trim { it <= ' ' }.replace(MULTIPLE_SPACES.toRegex(), PLUS_SIGN))
     }
 
     companion object {

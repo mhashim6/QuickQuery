@@ -10,7 +10,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-import static mhashim6.android.quickQuery.Utils.COPY_KEY;
+import static mhashim6.android.quickQuery.UtilsKt.COPY_KEY;
 
 
 /**

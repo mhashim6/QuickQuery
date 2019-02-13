@@ -1,5 +1,6 @@
 package mhashim6.android.quickQuery
 
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.ClipboardManager
 import android.content.Context
@@ -13,8 +14,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
-import mhashim6.android.quickQuery.Utils.IS_OREO
-import mhashim6.android.quickQuery.Utils.QUICK_QUERY_ACTION
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -29,6 +28,7 @@ class ClipboardMonitor : Service() {
 
     private var query: CharSequence? = null
 
+    @SuppressLint("NewApi")
     override fun onCreate() {
 
         super.onCreate()

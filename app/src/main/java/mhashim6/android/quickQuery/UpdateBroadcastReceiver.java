@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
-import static mhashim6.android.quickQuery.Utils.COPY_KEY;
+import static mhashim6.android.quickQuery.UtilsKt.COPY_KEY;
 
 /**
  * Created by mhashim6 on 17/02/2018.

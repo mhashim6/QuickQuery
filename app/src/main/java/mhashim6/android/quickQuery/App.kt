@@ -1,10 +1,11 @@
 package mhashim6.android.quickQuery
 
+import android.annotation.SuppressLint
 import android.app.Application
-import mhashim6.android.quickQuery.Utils.IS_OREO
 
 class App : Application() {
 
+    @SuppressLint("NewApi")
     override fun onCreate() {
         super.onCreate()
 

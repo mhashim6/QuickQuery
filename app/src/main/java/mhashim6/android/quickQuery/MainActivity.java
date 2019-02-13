@@ -14,9 +14,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import static mhashim6.android.quickQuery.Utils.COPY_KEY;
-import static mhashim6.android.quickQuery.Utils.DONATE_LINK;
-import static mhashim6.android.quickQuery.Utils.GOOGLE_PLAY_LINK_PRO;
+import static mhashim6.android.quickQuery.UtilsKt.COPY_KEY;
+import static mhashim6.android.quickQuery.UtilsKt.DONATE_LINK;
+import static mhashim6.android.quickQuery.UtilsKt.GOOGLE_PLAY_LINK_PRO;
+import static mhashim6.android.quickQuery.UtilsKt.openWebPage;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -106,13 +107,13 @@ public class MainActivity extends AppCompatActivity {
 
 		MenuItem rate = menu.findItem(R.id.rate_item);
 		rate.setOnMenuItemClickListener(item -> {
-			Utils.openWebPage(this, GOOGLE_PLAY_LINK_PRO);
+			openWebPage(this, GOOGLE_PLAY_LINK_PRO);
 			return true;
 		});
 
 		MenuItem donate = menu.findItem(R.id.donate_item);
 		donate.setOnMenuItemClickListener(item -> {
-			Utils.openWebPage(this, DONATE_LINK);
+			openWebPage(this, DONATE_LINK);
 			return true;
 		});
 		return super.onCreateOptionsMenu(menu);
