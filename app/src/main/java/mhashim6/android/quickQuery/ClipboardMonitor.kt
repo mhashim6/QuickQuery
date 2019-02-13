@@ -14,6 +14,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
+import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -62,7 +63,9 @@ class ClipboardMonitor : Service() {
                 URL(it.toString()) //ignore if url.
             } catch (e: MalformedURLException) {
                 this.query = it
-                showNewBubble()
+                mainScope.launch {
+                    showNewBubble()
+                }
             }
         }
     }
