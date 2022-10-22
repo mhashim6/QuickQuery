@@ -9,7 +9,7 @@
 	<string name="google_play">Google Play</string>
 	<string name="developer">Developer</string>
 	<string name="test">Tap to Test</string>
-	<string name="copy_summary">When copying a text, a floating button Will show on the screen. Hold to dismiss</string>
+	<string name="copy_summary">When copying a text, a floating button Will show on the screen. Hold to dismiss (Not Supported on Android 10+)</string>
 	<string name="hide_summary">Hides the floating bubble after the specified period (in Seconds).</string>
 	<string name="hide_title">Auto-hide delay</string>
 	<string name="pro_title">Pro Version</string>

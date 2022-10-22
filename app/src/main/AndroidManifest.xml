@@ -24,7 +24,8 @@
 
 		<activity
 			android:name=".MainActivity"
-			android:theme="@style/AppTheme">
+			android:theme="@style/AppTheme"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
@@ -34,7 +35,8 @@
 		<activity
 			android:name=".QQActivity"
 			android:excludeFromRecents="true"
-			android:noHistory="true">
+			android:noHistory="true"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.PROCESS_TEXT"/>
 				<category android:name="android.intent.category.DEFAULT"/>
@@ -54,12 +56,14 @@
 			</intent-filter>
 		</activity>
 
-		<receiver android:name=".BootBroadcastReceiver">
+		<receiver android:name=".BootBroadcastReceiver"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED"/>
 			</intent-filter>
 		</receiver>
-		<receiver android:name=".UpdateBroadcastReceiver">
+		<receiver android:name=".UpdateBroadcastReceiver"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MY_PACKAGE_REPLACED "/>
 			</intent-filter>

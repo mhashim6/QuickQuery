@@ -24,15 +24,22 @@ import java.net.URL
  */
 
 class ClipboardMonitor : Service() {
-
+    private val clipboardManager by lazy { getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
+    private val clipboardHandler = {
+        handleNewQuery(
+            clipboardManager.primaryClip?.getItemAt(
+                0
+            )?.text
+        )
+    }
     private lateinit var bubble: ImageView
 
     private var query: CharSequence? = null
 
     @SuppressLint("NewApi")
     override fun onCreate() {
-
         super.onCreate()
+        Log.i("fuck", "new service?!")
 
         if (IS_OREO)
             startForeground(FOREGROUND_ID, buildForegroundNotification(this))
@@ -41,8 +48,7 @@ class ClipboardMonitor : Service() {
 
         initBubble()
 
-        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboardManager.addPrimaryClipChangedListener { handleNewQuery(clipboardManager.primaryClip?.getItemAt(0)?.text) }
+        clipboardManager.addPrimaryClipChangedListener(clipboardHandler)
     }
 
     private fun initBubble() {
@@ -59,10 +65,11 @@ class ClipboardMonitor : Service() {
 
     private fun handleNewQuery(query: CharSequence?) {
         query?.let {
+//            if (query == this.query) return
             try {
                 URL(it.toString()) //ignore if url.
             } catch (e: MalformedURLException) {
-                this.query = it
+                this.query = query
                 mainScope.launch {
                     showNewBubble()
                 }
@@ -86,7 +93,7 @@ class ClipboardMonitor : Service() {
         }
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val duration = (preferences.getString("duration", "6")).toLong() * 1000
+        val duration = (preferences.getString("duration", "6"))!!.toLong() * 1000L
         newBubble.postDelayed({ removeBubbleFromWindow(newBubble) }, duration)
     }
 
@@ -110,20 +117,26 @@ class ClipboardMonitor : Service() {
     companion object {
         private const val FOREGROUND_ID = 77
         private val LAYOUT_PARAMS = WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                if (IS_OREO)
-                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                else
-                    WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-                PixelFormat.TRANSLUCENT)
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            if (IS_OREO)
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            else
+                WindowManager.LayoutParams.TYPE_PHONE,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+            PixelFormat.TRANSLUCENT
+        )
 
         init {
             LAYOUT_PARAMS.gravity = Gravity.TOP or Gravity.START
             LAYOUT_PARAMS.x = 3
             LAYOUT_PARAMS.y = 180
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clipboardManager.removePrimaryClipChangedListener(clipboardHandler)
     }
 
 }
